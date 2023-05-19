@@ -1,2 +1,5 @@
-# poseCalibration
-z axis appending
+# bidyCamLength
+
+access camera 
+take image
+input to Movenet thunder
