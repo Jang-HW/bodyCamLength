@@ -1,1 +1,1 @@
-D:\source\2movenetLength\bodyCamLength\sdk\build\intermediates\cxx\Debug\yz4b4u4z\obj\x86
+D:\source\bodyCamLength\sdk\build\intermediates\cxx\Debug\yz4b4u4z\obj\x86

@@ -89,8 +89,8 @@ class CameraSource(
     private var imageReaderHandler: Handler? = null
     private var cameraId: String = ""
 
-    fun initCamera(bitmap:Bitmap) {
-        processImage(bitmap)
+    fun initCamera(bitmap:Bitmap):Bitmap {
+        return processImage(bitmap)
     }
 
     fun prepareCamera() {
@@ -163,7 +163,7 @@ class CameraSource(
     }
 
     // process image
-    private fun processImage(bitmap: Bitmap) {
+    private fun processImage(bitmap: Bitmap):Bitmap {
         val persons = mutableListOf<Person>()
         var classificationResult: List<Pair<String, Float>>? = null
 
@@ -189,10 +189,10 @@ class CameraSource(
         if (persons.isNotEmpty()) {
             listener?.onDetectedInfo(persons[0].score, classificationResult)
         }
-        visualize(persons, bitmap)
+        return visualize(persons, bitmap)
     }
 
-    private fun visualize(persons: List<Person>, bitmap: Bitmap) {
+    private fun visualize(persons: List<Person>, bitmap: Bitmap):Bitmap {
 
         val outputBitmap = VisualizationUtils.drawBodyKeypoints(
             bitmap,
@@ -229,6 +229,7 @@ class CameraSource(
             )
             surfaceView.holder.unlockCanvasAndPost(canvas)
         }
+        return outputBitmap
     }
 
     private fun stopImageReaderThread() {

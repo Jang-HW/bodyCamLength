@@ -19,21 +19,24 @@ package org.tensorflow.lite.examples.poseestimation
 import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
+import android.media.ExifInterface
+import android.net.Uri
 import android.os.Bundle
-import android.os.Process
+import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.SurfaceView
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -41,29 +44,32 @@ import kotlinx.coroutines.launch
 import org.tensorflow.lite.examples.poseestimation.camera.CameraSource
 import org.tensorflow.lite.examples.poseestimation.data.Device
 import org.tensorflow.lite.examples.poseestimation.ml.*
+import org.tensorflow.lite.examples.poseestimation.finder.imagePresequence
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 class MainActivity : AppCompatActivity() {
-
-    /** 추가 **/
     // Manifest 에서 설정한 권한을 가지고 온다.
-    private val CAMERA_PERMISSION = arrayOf(Manifest.permission.CAMERA)
-    private val STORAGE_PERMISSION = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    val CAMERA_PERMISSION = arrayOf(Manifest.permission.CAMERA)
+    val STORAGE_PERMISSION = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     // 권한 플래그값 정의
-    private val FLAG_PERM_CAMERA = 98
-    private val FLAG_PERM_STORAGE = 99
+    val FLAG_PERM_CAMERA = 98
+    val FLAG_PERM_STORAGE = 99
 
-    // 카메라를 호출하는 플래그
-    private val FLAG_REQ_CAMERA = 101
+    // 카메라와 갤러리를 호출하는 플래그
+    val FLAG_REQ_CAMERA = 101
+    val FLAG_REA_STORAGE = 102
 
     //xml 개체 호출
-    lateinit var imgViewer: ImageView
     private lateinit var buttonListener: Button
+    lateinit var imgViewer: ImageView
 
-    companion object {
-        private const val FRAGMENT_DIALOG = "dialog"
-    }
+    // 사진을 저장할 위치
+    lateinit var currentPhotoPath: String
 
     /** A [SurfaceView] for camera preview.   */
     private lateinit var surfaceView: SurfaceView
@@ -136,35 +142,8 @@ class MainActivity : AppCompatActivity() {
 
         // 화면이 만들어 지면서 저장소 권한을 체크 합니다.
         // 권한이 승인되어 있으면 카메라를 호출하는 메소드를 실행합니다.
-        if(checkPermission(STORAGE_PERMISSION,FLAG_PERM_STORAGE)){
-            setViews()
-        }
-    }
+        setViews()
 
-    private fun setViews() {
-        //카메라 버튼 클릭
-        if(checkPermission(CAMERA_PERMISSION,FLAG_PERM_CAMERA)){
-            buttonListener.setOnClickListener {
-                //카메라 호출 메소드
-                openCamera()
-            }
-        }
-    }
-
-    // 권한이 있는지 체크하는 메소드
-    private fun checkPermission(permissions:Array<out String>,flag:Int):Boolean{
-        for(permission in permissions){
-            // 만약 권한이 승인되어 있지 않다면 권한승인 요청을 사용에 화면에 호출합니다.
-            if(ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
-                ActivityCompat.requestPermissions(this, permissions, flag)
-            if(ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
-                return false
-        }
-        return true
-    }
-
-    // open camera
-    private fun openCamera() {
         if (cameraSource == null) {
             cameraSource =
                 CameraSource(surfaceView, object : CameraSource.CameraSourceListener {
@@ -187,10 +166,84 @@ class MainActivity : AppCompatActivity() {
                 // Do nothing
             }
         }
+    }
+
+    private fun setViews() {
+        //카메라 버튼 클릭
+        if(checkPermission(CAMERA_PERMISSION,FLAG_PERM_CAMERA)){
+            buttonListener.setOnClickListener {
+                val builder = AlertDialog.Builder(this)
+                builder
+                    .setTitle("Title")
+                    .setMessage("MessageMessageMessageMessageMessageMessage")
+                    .setPositiveButton("Start",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            // Start 버튼 선택시 수행
+                            openCamera()
+                        })
+                builder.create()
+                builder.show()
+                //카메라 호출 메소드
+            }
+        }
+    }
+
+    // 권한이 있는지 체크하는 메소드
+    private fun checkPermission(permissions:Array<out String>,flag:Int):Boolean{
+        for(permission in permissions){
+            // 만약 권한이 승인되어 있지 않다면 권한승인 요청을 사용에 화면에 호출합니다.
+            if(ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
+                ActivityCompat.requestPermissions(this, permissions, flag)
+            if(ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
+                return false
+        }
+        return true
+    }
+
+    // 사진을 저장해주는 메소드
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            currentPhotoPath = absolutePath
+        }
+    }
+
+    // open camera
+    private fun openCamera() {
+
         createPoseEstimator()
 
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent,FLAG_REQ_CAMERA)
+
+        // Ensure that there's a camera activity to handle the intent
+        intent.resolveActivity(packageManager)?.also {
+            // Create the File where the photo should go
+            val photoFile: File? = try {
+                createImageFile()
+            } catch (ex: IOException) {
+                // Error occurred while creating the File
+                null
+            }
+            // Continue only if the File was successfully created
+            photoFile?.also {
+                val photoURI: Uri = FileProvider.getUriForFile(
+                    this,
+                    "com.example.android.fileprovider",
+                    it
+                )
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+
+                startActivityForResult(intent, FLAG_REQ_CAMERA)
+            }
+        }
     }
 
     private fun isPoseClassifier() {
@@ -294,7 +347,7 @@ class MainActivity : AppCompatActivity() {
                 for(grant in grantResults){
                     if(grant != PackageManager.PERMISSION_GRANTED){
                         // 권한이 승인되지 않았다면 return을 사용하여 메소드를 종료시켜 줍니다
-                        showToast("저장소 권한을 승인해야만 앱을 사용할 수 있습니다.")
+                        Toast.makeText(this,"저장소 권한을 승인해야지만 앱을 사용할 수 있습니다..",Toast.LENGTH_SHORT).show()
                         finish()
                         return
                     }
@@ -305,7 +358,7 @@ class MainActivity : AppCompatActivity() {
             FLAG_PERM_CAMERA ->{
                 for(grant in grantResults){
                     if(grant != PackageManager.PERMISSION_GRANTED){
-                        showToast("카메라 권한을 승인해야만 카메라를 사용할 수 있습니다.")
+                        Toast.makeText(this,"카메라 권한을 승인해야지만 카메라를 사용할 수 있습니다.",Toast.LENGTH_SHORT).show()
                         return
                     }
                 }
@@ -314,18 +367,27 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     // startActivityForResult 을 사용한 다음 돌아오는 결과값을 해당 메소드로 호출합니다.
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == RESULT_OK){
             when(requestCode){
                 FLAG_REQ_CAMERA ->{
-                    if(data?.extras?.get("data") != null){
-                        //카메라로 방금 촬영한 이미지를 미리 만들어 놓은 이미지뷰로 전달 합니다.
-                        val bitmap = data?.extras?.get("data") as Bitmap
-                        cameraSource?.initCamera(bitmap)
-                        imgViewer.setImageBitmap(bitmap)
+                    val file = File(currentPhotoPath)
+                    var cacheBitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(file))
+                    if (cacheBitmap != null) {
+                        val exif = currentPhotoPath?.let { ExifInterface(it) }
+                        val exifOrientation: Int = exif!!.getAttributeInt(
+                            ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+                        val exifDegree = imagePresequence.exifOrientationToDegrees(exifOrientation)
+                        cacheBitmap = imagePresequence.rotate(cacheBitmap, exifDegree)
                     }
+                    else Log.d("myBitmap null", "null")
+
+                    cacheBitmap = cameraSource?.initCamera(cacheBitmap)
+                    imgViewer.setImageBitmap(cacheBitmap)
+
                 }
             }
         }

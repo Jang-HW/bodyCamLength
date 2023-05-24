@@ -1,4 +1,4 @@
-# Install script for directory: D:/source/2movenetLength/bodyCamLength/sdk/libcxx_helper
+# Install script for directory: D:/source/bodyCamLength/sdk/libcxx_helper
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "D:/source/2movenetLength/bodyCamLength/sdk/.cxx/Debug/yz4b4u4z/x86/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "D:/source/bodyCamLength/sdk/.cxx/Debug/yz4b4u4z/x86/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

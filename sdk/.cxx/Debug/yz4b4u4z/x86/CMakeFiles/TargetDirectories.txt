@@ -1,3 +1,3 @@
-D:/source/2movenetLength/bodyCamLength/sdk/.cxx/Debug/yz4b4u4z/x86/CMakeFiles/opencv_jni_shared.dir
-D:/source/2movenetLength/bodyCamLength/sdk/.cxx/Debug/yz4b4u4z/x86/CMakeFiles/edit_cache.dir
-D:/source/2movenetLength/bodyCamLength/sdk/.cxx/Debug/yz4b4u4z/x86/CMakeFiles/rebuild_cache.dir
+D:/source/bodyCamLength/sdk/.cxx/Debug/yz4b4u4z/x86/CMakeFiles/opencv_jni_shared.dir
+D:/source/bodyCamLength/sdk/.cxx/Debug/yz4b4u4z/x86/CMakeFiles/edit_cache.dir
+D:/source/bodyCamLength/sdk/.cxx/Debug/yz4b4u4z/x86/CMakeFiles/rebuild_cache.dir

@@ -14,4 +14,4 @@
 -- Detecting CXX compile features - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: D:/source/2movenetLength/bodyCamLength/sdk/.cxx/Debug/yz4b4u4z/x86
+-- Build files have been written to: D:/source/bodyCamLength/sdk/.cxx/Debug/yz4b4u4z/x86

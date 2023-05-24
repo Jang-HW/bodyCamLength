@@ -1,26 +1,26 @@
 {
   "buildFiles": [
-    "D:\\source\\2movenetLength\\bodyCamLength\\sdk\\libcxx_helper\\CMakeLists.txt"
+    "D:\\source\\bodyCamLength\\sdk\\libcxx_helper\\CMakeLists.txt"
   ],
   "cleanCommandsComponents": [
     [
       "C:\\Users\\hw115\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
       "-C",
-      "D:\\source\\2movenetLength\\bodyCamLength\\sdk\\.cxx\\Debug\\yz4b4u4z\\x86",
+      "D:\\source\\bodyCamLength\\sdk\\.cxx\\Debug\\yz4b4u4z\\x86",
       "clean"
     ]
   ],
   "buildTargetsCommandComponents": [
     "C:\\Users\\hw115\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
     "-C",
-    "D:\\source\\2movenetLength\\bodyCamLength\\sdk\\.cxx\\Debug\\yz4b4u4z\\x86",
+    "D:\\source\\bodyCamLength\\sdk\\.cxx\\Debug\\yz4b4u4z\\x86",
     "{LIST_OF_TARGETS_TO_BUILD}"
   ],
   "libraries": {
     "opencv_jni_shared::@6890427a1f51a3e7e1df": {
       "artifactName": "opencv_jni_shared",
       "abi": "x86",
-      "output": "D:\\source\\2movenetLength\\bodyCamLength\\sdk\\.cxx\\Debug\\yz4b4u4z\\x86\\libopencv_jni_shared.a",
+      "output": "D:\\source\\bodyCamLength\\sdk\\.cxx\\Debug\\yz4b4u4z\\x86\\libopencv_jni_shared.a",
       "runtimeFiles": []
     }
   }

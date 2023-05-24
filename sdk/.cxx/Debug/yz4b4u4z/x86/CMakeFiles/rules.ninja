@@ -42,7 +42,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = C:\Users\hw115\AppData\Local\Android\Sdk\cmake\3.22.1\bin\cmake.exe --regenerate-during-build -SD:\source\2movenetLength\bodyCamLength\sdk\libcxx_helper -BD:\source\2movenetLength\bodyCamLength\sdk\.cxx\Debug\yz4b4u4z\x86
+  command = C:\Users\hw115\AppData\Local\Android\Sdk\cmake\3.22.1\bin\cmake.exe --regenerate-during-build -SD:\source\bodyCamLength\sdk\libcxx_helper -BD:\source\bodyCamLength\sdk\.cxx\Debug\yz4b4u4z\x86
   description = Re-running CMake...
   generator = 1
 

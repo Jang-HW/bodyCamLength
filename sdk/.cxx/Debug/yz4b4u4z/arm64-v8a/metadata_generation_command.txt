@@ -1,4 +1,4 @@
-                        -HD:\source\2movenetLength\bodyCamLength\sdk\libcxx_helper
+                        -HD:\source\bodyCamLength\sdk\libcxx_helper
 -DCMAKE_SYSTEM_NAME=Android
 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 -DCMAKE_SYSTEM_VERSION=21
@@ -9,10 +9,10 @@
 -DCMAKE_ANDROID_NDK=C:\Users\hw115\AppData\Local\Android\Sdk\ndk\23.1.7779620
 -DCMAKE_TOOLCHAIN_FILE=C:\Users\hw115\AppData\Local\Android\Sdk\ndk\23.1.7779620\build\cmake\android.toolchain.cmake
 -DCMAKE_MAKE_PROGRAM=C:\Users\hw115\AppData\Local\Android\Sdk\cmake\3.22.1\bin\ninja.exe
--DCMAKE_LIBRARY_OUTPUT_DIRECTORY=D:\source\2movenetLength\bodyCamLength\sdk\build\intermediates\cxx\Debug\yz4b4u4z\obj\arm64-v8a
--DCMAKE_RUNTIME_OUTPUT_DIRECTORY=D:\source\2movenetLength\bodyCamLength\sdk\build\intermediates\cxx\Debug\yz4b4u4z\obj\arm64-v8a
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=D:\source\bodyCamLength\sdk\build\intermediates\cxx\Debug\yz4b4u4z\obj\arm64-v8a
+-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=D:\source\bodyCamLength\sdk\build\intermediates\cxx\Debug\yz4b4u4z\obj\arm64-v8a
 -DCMAKE_BUILD_TYPE=Debug
--BD:\source\2movenetLength\bodyCamLength\sdk\.cxx\Debug\yz4b4u4z\arm64-v8a
+-BD:\source\bodyCamLength\sdk\.cxx\Debug\yz4b4u4z\arm64-v8a
 -GNinja
 -DANDROID_STL=c++_shared
                         Build command args: []

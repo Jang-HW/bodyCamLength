@@ -1,2 +1,2 @@
-ninja: Entering directory `D:\source\2movenetLength\bodyCamLength\sdk\.cxx\Debug\yz4b4u4z\x86'
+ninja: Entering directory `D:\source\bodyCamLength\sdk\.cxx\Debug\yz4b4u4z\x86'
 ninja: no work to do.

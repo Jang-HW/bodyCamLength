@@ -14,4 +14,4 @@
 -- Detecting CXX compile features - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: D:/source/bodyLength/sdk/.cxx/Debug/yz4b4u4z/arm64-v8a
+-- Build files have been written to: D:/source/bodyCamLength/sdk/.cxx/Debug/yz4b4u4z/arm64-v8a
